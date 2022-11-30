@@ -9,7 +9,6 @@
 
 #define widthbytes(bits)   (((bits)+31)/32*4)
 
-inline unsigned char clip(int value, int min, int max);
 unsigned char clip(int value, int min, int max)
 {
     return(value > max? max : value < min? min : value);
@@ -25,7 +24,7 @@ int main(int argc, char** argv)
 	unsigned int file_size;   
 	unsigned short int reserved1; 
 	unsigned short int reserved2; 
-	unsigned int offset;   
+	unsigned int bfOffBits;   
 	
     /* BMP IMAGE INFO */
 	unsigned int header_size;  
@@ -86,8 +85,8 @@ int main(int argc, char** argv)
 	if(!imagesize) 
 	    imagesize = bmpInfoHeader.biHeight * size;
 
-	inimg = (BYTE*)malloc(sizeof(BYTE)*imagesize);
-	outimg = (BYTE*)malloc(sizeof(BYTE)*imagesize);
+	inimg = (BYTE*)malloc(sizeof(BYTE)*imagesize);    // input image
+	outimg = (BYTE*)malloc(sizeof(BYTE)*imagesize);   // output image(gray color)
 	fread(inimg, sizeof(BYTE), imagesize, fp);
 	
 	fclose(fp);
@@ -118,7 +117,7 @@ int main(int argc, char** argv)
 		printf("  %d\n", histogram[i]);
     };
 	
-	offset += 256*sizeof(RGBQUAD); 
+    bmpHeader.bfOffBits += 256*sizeof(RGBQUAD); 
 
 	if((fp = fopen(output, "wb")) == NULL) {
 		fprintf(stderr, "Error : Failed to open file...\n");
