@@ -3,7 +3,7 @@
 #include <string.h>
 #include <limits.h>                     /* USHRT_MAX 상수를 위해서 사용한다. */
 #include "bmpHeader.h"
-
+ 
 #define widthBytes(bits) (((bits)+31)/32*4)
 
 /* 이미지 데이터의 경계 검사를 위한 매크로 */
