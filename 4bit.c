@@ -54,9 +54,6 @@ int main(int argc, char** argv)
     printf("Image Size : %d\n", bmpInfoHeader.SizeImage);
     printf("Color : %d\n", bmpInfoHeader.biClrUsed);
     
-    if(bmpInfoHeader.biBitCount == 8 && bmpInfoHeader.biClrUsed == 0)
-        bmpInfoHeader.biClrUsed = 256;
-
     palrgb = (RGBQUAD*)malloc(sizeof(RGBQUAD)*bmpInfoHeader.biClrUsed);
     fread(palrgb, sizeof(RGBQUAD), bmpInfoHeader.biClrUsed, fp); 
 
@@ -74,14 +71,15 @@ int main(int argc, char** argv)
     elemSize = 3; //bmpInfoHeader.biBitCount / 8;
     int pos = 0; 
 
-    for(x = 0; x < bmpInfoHeader.biWidth*bmpInfoHeader.biHeight; x++) { 
-         int num = inimg[x]; 
-         int res = num;
-         outimg[pos++]=palrgb[res].rgbBlue;
-         outimg[pos++]=palrgb[res].rgbGreen;
-         outimg[pos++]=palrgb[res].rgbRed;
-    }         
-     
+    for(x = 0; x < bmpInfoHeader.biWidth*bmpInfoHeader.biHeight/2; x++) { 
+         for(int i = 4; i >= 0; i-=4) { //8자리 숫자까지 나타냄
+             int num = inimg[x]; 
+             int res = num >> i & 15;
+             outimg[pos++]=palrgb[res].rgbBlue;
+             outimg[pos++]=palrgb[res].rgbGreen;
+             outimg[pos++]=palrgb[res].rgbRed;
+        }
+    }  
     /***** write bmp *****/ 
     if((fp=fopen(argv[2], "wb"))==NULL) { 
         fprintf(stderr, "Error : Failed to open file...₩n"); 
