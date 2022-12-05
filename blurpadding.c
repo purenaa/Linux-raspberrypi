@@ -56,12 +56,11 @@ int main(int argc, char** argv)
     printf("Padding Size : %d\n", paddingSize);
     printf("Paddimg Size : %d\n", imageSize + paddingSize);
 
-    inimg = (ubyte*)malloc(sizeof(ubyte)*imageSize); 
-    outimg = (ubyte*)malloc(sizeof(ubyte)*imageSize + paddingSize);
-    paddimg = (ubyte*)malloc(sizeof(ubyte)*imageSize + paddingSize);
-    fread(inimg, sizeof(ubyte), imageSize, fp); 
-    fread(paddimg, sizeof(ubyte), imageSize + paddingSize, fp); 
-    
+    inimg = (ubyte*)malloc(sizeof(ubyte)*imageSize+paddingSize); 
+    outimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);
+   // paddimg = (ubyte*)malloc(sizeof(ubyte)*imageSize + paddingSize);
+    fread(inimg, sizeof(ubyte), imageSize+paddingSize, fp); 
+
     fclose(fp);
 
     // define the kernel
@@ -69,7 +68,7 @@ int main(int argc, char** argv)
                            {1/9.0, 1/9.0, 1/9.0},
                            {1/9.0, 1/9.0, 1/9.0} };
    
-    memset(outimg, 0, sizeof(ubyte)*imageSize + paddingSize);
+    memset(outimg, 0, sizeof(ubyte)*imageSize);
     for(y = 0; y < bmpInfoHeader.biHeight+1; y++) { 
         for(x = 0; x < (bmpInfoHeader.biWidth+1) * elemSize; x+=elemSize) {
             for(z = 0; z < elemSize; z++) {
@@ -103,7 +102,7 @@ int main(int argc, char** argv)
     
     free(inimg); 
     free(outimg);
-    free(paddimg);
+   // free(paddimg);
     
     return 0;
 }
