@@ -56,19 +56,20 @@ int main(int argc, char** argv)
 
     inimg = (ubyte*)malloc(sizeof(ubyte)*imageSize); 
     grayimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);
-	outimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);
-	fread(inimg, sizeof(ubyte), imageSize, fp); 
+    outimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);
+    fread(inimg, sizeof(ubyte), imageSize, fp); 
     fclose(fp);
 
-	for(y=0; y<bmpInfoHeader.biHeight; y++) {
-		for(x=0; x<size; x+=elemSize) {
-			ubyte b = inimg[x+y*size+0];
-			ubyte g = inimg[x+y*size+1];
-			ubyte r = inimg[x+y*size+2];
-			grayimg[x+y*size+0]=grayimg[x+y*size+1]=
-				grayimg[x+y*size+2]=((66*r+129*g+25*b+128)>>8)+16;
-		}
+    /* gray scale로 변환 */
+    for(y=0; y<bmpInfoHeader.biHeight; y++) {
+	for(x=0; x<size; x+=elemSize) {
+		ubyte b = inimg[x+y*size+0];
+		ubyte g = inimg[x+y*size+1];
+		ubyte r = inimg[x+y*size+2];
+		grayimg[x+y*size+0]=grayimg[x+y*size+1] =
+			grayimg[x+y*size+2]=((66*r+129*g+25*b+128)>>8)+16;
 	}
+    }
 			
     int padSize = (bmpInfoHeader.biWidth + 2) * elemSize;
     int addSize = (padSize + bmpInfoHeader.biHeight)*2;
@@ -107,12 +108,12 @@ int main(int argc, char** argv)
 
     // define the kernel
     float xkernel[3][3] = { {-1, 0, +1},
-							{-2, 0, +2},
-							{-1, 0, +1} };
+			    {-2, 0, +2},
+			    {-1, 0, +1} };
 
     float ykernel[3][3] = { {+1, +2, +1},
-							{ 0,  0,  0},
-							{-1, -2, -1} };
+			    { 0,  0,  0},
+			    {-1, -2, -1} };
 
     memset(outimg, 0, sizeof(ubyte)*imageSize);
     for(y = 1; y < bmpInfoHeader.biHeight + 1; y++) { 
@@ -123,8 +124,8 @@ int main(int argc, char** argv)
                     for(int j = -1; j < 2; j++) {
                         xVal += xkernel[i+1][j+1]*padimg[(x+i*elemSize)+(y+j)*padSize+z];
                         yVal += ykernel[i+1][j+1]*padimg[(x+i*elemSize)+(y+j)*padSize+z];
-					}
-                }
+		    }
+	        }
                 outimg[(x-elemSize)+(y-1)*size+z] = LIMIT_UBYTE(sqrt(xVal*xVal + yVal*yVal));
             }
         }
@@ -149,7 +150,7 @@ int main(int argc, char** argv)
     fclose(fp); 
 
     free(inimg); 
-	free(grayimg);
+    free(grayimg);
     free(outimg);
     free(padimg);
     
