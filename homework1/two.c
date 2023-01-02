@@ -62,10 +62,10 @@ int main(int argc, char**argv)								/* argc : 인자의 개수, argv : 인자�
 	}
 
 	palrgb = (RGBQUAD*)malloc(sizeof(RGBQUAD)*256);					/* 256개 palrgb 메모리를 할당해준다. */
-    for(x = 0; x < 256; x++) {								/* 색상이 256개 만큼 for문 반복 */
+    	for(x = 0; x < 256; x++) {							/* 색상이 256개 만큼 for문 반복 */
         palrgb[x].rgbBlue = palrgb[x].rgbGreen = palrgb[x].rgbRed = x;
         palrgb[x].rgbReserved = 0;
-    }	
+    	}	
 	
 	if((fp=fopen(argv[2], "wb"))==NULL) {						/* argv[2]이 NULL일 경우 예외처리 */
 		fprintf(stderr, "Error : Failed to open file...\n");
