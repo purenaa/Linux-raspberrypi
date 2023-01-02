@@ -13,11 +13,11 @@ int main(int argc, char**argv)
 	FILE* fp;
 	BITMAPFILEHEADER bmpHeader;
 	BITMAPINFOHEADER bmpInfoHeader;
-	ubyte *inimg;
-	int x, y, imageSize;
+	ubyte *inimg, *outimg;
+	int i, imageSize;
 
-	if(argc != 2) {
-		fprintf(stderr, "usage : %s input.bmp\n", argv[0]);
+	if(argc != 3) {
+		fprintf(stderr, "usage : %s input.bmp out.bmp\n", argv[0]);
 		return -1;
 	}
 
@@ -44,22 +44,36 @@ int main(int argc, char**argv)
 	imageSize = size * bmpInfoHeader.biHeight;
 
 	inimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);
+	outimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);
+	
 	fread(inimg, sizeof(ubyte), imageSize , fp);
 	fclose(fp);
-	
-	for(y = 0; y < bmpInfoHeader.biHeight; y++) {
-		for(x = 0; x < size; x+=elemSize) {
-			ubyte b = inimg[x+y*size+0];
-            ubyte g = inimg[x+y*size+1];
-            ubyte r = inimg[x+y*size+2];
-			printf("r : %d, g : %d, b : %d\n", r, g, b);
-		}
+
+	for(i = 0; i < imageSize; i += elemSize) {
+		outimg[i+0] = inimg[i+0];
+		outimg[i+1] = inimg[i+1];
+		outimg[i+2] = inimg[i+2];
 	}
-	//fwrite(&bmpHeader, sizeof(BITMAPFILEHEADER), 1, fp);
-	//fwrite(&bmpInfoHeader, sizeof(BITMAPINFOHEADER), 1, fp);
+	
+
+	/***** write bmp *****/
+	if((fp=fopen(argv[2], "wb"))==NULL) {
+		fprintf(stderr, "Error : Failed to open file...\n");
+		return -1;
+	}
+	
+	/* BITMAPFILEHEADER 구조체의 데이터 */
+	fwrite(&bmpHeader, sizeof(BITMAPFILEHEADER), 1, fp);
+
+	/* BITMAPINFOHEADER 구조체의 데이터*/
+	fwrite(&bmpInfoHeader, sizeof(BITMAPINFOHEADER), 1, fp);
+	
+	fwrite(outimg, sizeof(ubyte), imageSize, fp);
+	
+	fclose(fp);
 
 	free(inimg);
-
+	free(outimg);
 	return 0;
 }
 
