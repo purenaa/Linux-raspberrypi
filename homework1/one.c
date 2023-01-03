@@ -55,8 +55,8 @@ int main(int argc, char**argv)								/* argc : 인자의 개수, argv : 인자�
 	for(y = 0; y < bmpInfoHeader.biHeight; y++) {					/* y : 행, 즉 이미지의 높이만큼 for문을 반복한다. */
 		for(x = 0; x < size; x+=elemSize) {					/* x : 열, 즉 이미지의 총 가로의 크기만큼 for문을 반복한다. */
 			ubyte b = inimg[x+y*size+0];					/* 한 픽셀의 RGB값 중에서 Blue에 해당하는 값 */
-            ubyte g = inimg[x+y*size+1];						/* 한 픽셀의 RGB값 중에서 Green에 해당하는 값 */
-            ubyte r = inimg[x+y*size+2];						/* 한 픽셀의 RGB값 중에서 Red에 해당하는 값 */
+            		ubyte g = inimg[x+y*size+1];					/* 한 픽셀의 RGB값 중에서 Green에 해당하는 값 */
+            		ubyte r = inimg[x+y*size+2];					/* 한 픽셀의 RGB값 중에서 Red에 해당하는 값 */
 			printf("r : %d, g : %d, b : %d\n", r, g, b);			/* 각각의 한 픽셀의 R, G, B값들을 출력  */
 		}
 	}
