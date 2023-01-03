@@ -50,7 +50,7 @@ int main(int argc, char**argv)								/* argc : 인자의 개수, argv : 인자�
 	inimg = (ubyte*)malloc(sizeof(ubyte)*imageSize);				/* 총 이미지의 크기만큼 inimg의 메모리를 할당해준다. */
 	
 	fread(inimg, sizeof(ubyte), imageSize , fp);					/* inimg에 있는 데이터를 1*imageSize만큼 읽는다. */
-	fclose(fp);												/* 파일 포인터를 닫음 */
+	fclose(fp);									/* 파일 포인터를 닫음 */
 	
 	for(y = 0; y < bmpInfoHeader.biHeight; y++) {					/* y : 행, 즉 이미지의 높이만큼 for문을 반복한다. */
 		for(x = 0; x < size; x+=elemSize) {					/* x : 열, 즉 이미지의 총 가로의 크기만큼 for문을 반복한다. */
